@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>BigBook</title>
+</head>
+<body>
+
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Book page</h1>
+            <br>
+            <p>Title: <span th:text="${book.title}"></span></p>
+            <p>Author: <span th:text="${book.author}"></span></p>
+            <p>ISBN: <span id="isbn" th:text="${book.isbn}"></span></p>
+            <button id="deleteBook" type="button" class="btn btn-danger">Delete</button>
+            <br>
+            <br>
+            <a href="/">Main page</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#deleteBook").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/books/delete',
+            dataType: 'json',
+            data: JSON.stringify({
+                isbn: $('#isbn').text(),
+            }),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Content-Type', 'application/json')
+            },
+            success: function () {
+                window.location = '/';
+            },
+            error: function (jqXHR) {
+                window.location = '/';
+            }
+        });
+    });
+</script>
+</body>
+</html>
