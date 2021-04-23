@@ -33,4 +33,9 @@ public class FileSystemRepository {
             throw new WebException(HttpStatus.NOT_FOUND, "File not found");
         }
     }
+
+    public void delete(String location) {
+        FileSystemResource resource = findInFileSystem(location);
+        resource.getFile().delete();
+    }
 }

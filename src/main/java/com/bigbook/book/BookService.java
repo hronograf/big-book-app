@@ -4,6 +4,7 @@ import com.bigbook.book.dto.CreateBookRequestDto;
 import com.bigbook.book.dto.DeleteBookRequestDto;
 import com.bigbook.book.dto.SearchBookResponseDto;
 import com.bigbook.exceptions.BookAlreadyExistsException;
+import com.bigbook.file.handling.FileSystemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final FileSystemRepository fileSystemRepository;
 
     public SearchBookResponseDto findBooks(String title, String isbn, int pageNumber) {
         Page<BookEntity> page = bookRepository.findAll(
@@ -36,6 +38,8 @@ public class BookService {
     }
 
     public void deleteBook(DeleteBookRequestDto requestDto) {
+        BookEntity bookEntity = bookRepository.findById(requestDto.getIsbn()).orElseThrow();
+        fileSystemRepository.delete(bookEntity.getFileLocation());
         bookRepository.deleteById(requestDto.getIsbn());
     }
 }

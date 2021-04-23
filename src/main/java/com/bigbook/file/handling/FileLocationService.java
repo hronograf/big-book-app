@@ -2,6 +2,7 @@ package com.bigbook.file.handling;
 
 import com.bigbook.book.BookEntity;
 import com.bigbook.book.BookRepository;
+import com.bigbook.exceptions.WebException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -17,16 +18,20 @@ public class FileLocationService {
     private final BookRepository bookRepository;
 
     public void save(String isbn, byte[] bytes, String filename) throws Exception {
-        String location = fileSystemRepository.save(bytes, filename);
+        System.out.println("in save");
         BookEntity bookEntity = bookRepository.findById(isbn).orElseThrow();
+        fileSystemRepository.delete(bookEntity.getFileLocation());
+
+        String fileLocation = fileSystemRepository.save(bytes, filename);
         bookEntity.setFilename(filename);
-        bookEntity.setFileLocation(location);
+        bookEntity.setFileLocation(fileLocation);
         bookRepository.saveAndFlush(bookEntity);
+        System.out.println("saved");
     }
 
     public FileSystemResource find(String isbn) {
         BookEntity bookEntity = bookRepository.findById(isbn)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Book not found"));
 
         return fileSystemRepository.findInFileSystem(bookEntity.getFileLocation());
     }

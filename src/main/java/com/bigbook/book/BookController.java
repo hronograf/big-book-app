@@ -10,6 +10,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RequiredArgsConstructor
 
 @RestController
@@ -42,13 +44,15 @@ public class BookController {
     @PostMapping("/file/{isbn}")
     public void uploadFile(
             @PathVariable("isbn") String isbn,
-            @RequestParam MultipartFile file
+            @RequestParam MultipartFile file,
+            HttpServletResponse response
     ) throws Exception {
         fileLocationService.save(isbn, file.getBytes(), file.getOriginalFilename());
+        response.sendRedirect("/book/" + isbn);
     }
 
     @GetMapping(value = "/file/{isbn}")
-    FileSystemResource downloadFile(@PathVariable("isbn") String isbn) {
+    public FileSystemResource downloadFile(@PathVariable("isbn") String isbn) {
         return fileLocationService.find(isbn);
     }
 
