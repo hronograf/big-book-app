@@ -30,6 +30,18 @@ public class BookEntity {
     @Column(name = "author")
     private String author;
 
+    @Column(name = "filename")
+    private String filename;
+
+    @Column(name = "file_loacation")
+    private String fileLocation;
+
+    public BookEntity(String isbn, String title, String author) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+    }
+
     public static Specification<BookEntity> titleIgnoreCaseContains(String title) {
         String lowercaseTitle = title.toLowerCase();
         return (book, cq, cb) -> cb.like(cb.lower(book.get("title")), "%" + lowercaseTitle + "%");

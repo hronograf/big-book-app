@@ -24,12 +24,25 @@
             <button id="deleteBook" type="button" class="btn btn-danger">Delete</button>
             <br>
             <br>
+            <div>
+                <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/books/file">
+                    <table>
+                        <tr><td>Book to upload:</td><td><input type="file" name="file"/></td></tr>
+                        <tr><td></td><td><input type="submit" value="Upload"/></td></tr>
+                    </table>
+                </form>
+            </div>
             <a href="/">Main page</a>
         </div>
     </div>
 </div>
 
 <script>
+    let uploadForm = $("#uploadForm");
+    let pathToUpload = uploadForm.attr("action");
+    pathToUpload += '/' + window.location.href.split('/').pop();
+    uploadForm.attr("action", pathToUpload);
+
     $("#deleteBook").click(function () {
         $.ajax({
             type: 'POST',
