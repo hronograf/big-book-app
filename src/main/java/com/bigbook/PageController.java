@@ -2,11 +2,14 @@ package com.bigbook;
 
 import com.bigbook.book.BookEntity;
 import com.bigbook.book.BookRepository;
+import com.bigbook.exceptions.WebException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 
@@ -21,9 +24,9 @@ public class PageController {
         return "index";
     }
 
-    @GetMapping("/book/{isbn}")
-    public String getBookInfo(@PathVariable("isbn") String isbn, Model model) {
-        BookEntity bookEntity = bookRepository.findById(isbn).orElseThrow(IllegalArgumentException::new);
+    @GetMapping("/book")
+    public String getBookInfo(@RequestParam("isbn") String isbn, Model model) {
+        BookEntity bookEntity = bookRepository.findById(isbn).orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Book not found"));
         model.addAttribute("book", bookEntity);
         return "bookPage";
     }

@@ -32,6 +32,7 @@ public class FileLocationService {
     public FileSystemResource find(String isbn) {
         BookEntity bookEntity = bookRepository.findById(isbn)
                 .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Book not found"));
+        if (bookEntity.getFileLocation() == null) throw new WebException(HttpStatus.NOT_FOUND, "File not found");
 
         return fileSystemRepository.findInFileSystem(bookEntity.getFileLocation());
     }

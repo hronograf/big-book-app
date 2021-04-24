@@ -48,7 +48,7 @@ public class BookController {
             HttpServletResponse response
     ) throws Exception {
         fileLocationService.save(isbn, file.getBytes(), file.getOriginalFilename());
-        response.sendRedirect("/book/" + isbn);
+        response.sendRedirect("/book?isbn=" + isbn);
     }
 
     @GetMapping(value = "/file/{isbn}")

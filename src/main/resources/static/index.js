@@ -78,7 +78,7 @@
         let tableContent = "";
         let newLocation;
         for (let i = 0; i < books.length; ++i) {
-            newLocation = '/book/' + books[i].isbn;
+            newLocation = '/book?isbn=' + books[i].isbn;
             tableContent += `
         <tr class="hand-hover" onclick="document.location = '${newLocation}';">
             <td>${books[i].title}</td>

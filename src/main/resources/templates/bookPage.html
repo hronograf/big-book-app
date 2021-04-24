@@ -48,7 +48,7 @@
 </div>
 
 <script>
-    let bookIsbn = window.location.href.split('/').pop();
+    let bookIsbn = $('#isbn').text();
     $("#fileLink").attr("href", "/books/file/" + bookIsbn);
 
     let uploadForm = $("#uploadForm");
